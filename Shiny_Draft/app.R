@@ -50,7 +50,7 @@ server <- function(input, output) {
   output$nfl_draft <- renderPlot(
     
     ggplot(data = drafted_players %>%
-             filter(team == input$TEAM), 
+             filter(team == input$TEAM & draft_year < 2019), 
            aes(x = draft_year, y = round, size = relative_round, color = AV_regressed, label = player))+
       
       geom_point(size = 3, color = "black")+
@@ -73,22 +73,24 @@ server <- function(input, output) {
   output$nfl_draft <- renderPlot(
     
     ggplot(data = drafted_players %>%
-             filter(team == input$TEAM), 
-           aes(x = reorder(paste0(player, "/", draft_year), -AV_regressed), y = relative_round, fill = relative_round))+
+             filter(team == input$TEAM & games > 0 & draft_year < 2019), 
+           aes(x = reorder(paste0(player, "/", draft_year), AV_regressed), y = relative_round, fill = AV_regressed))+
       
       geom_bar(position = "stack", stat = "identity")+
       
       labs(x = "",
-           y = "Round Selected",
+           y = "Value relative to round",
            title = paste0("Draft picks for ", input$TEAM))+
-      scale_fill_gradient2(low = "dark red", mid = "gray", high = "#37b36c", midpoint = 4)+
-      theme(axis.text = element_text(size = 24, face = "bold"),
+      scale_fill_gradient2(low = "dark red", mid = "gray", high = "#37b36c", midpoint = 4, name = "Season AV")+
+      theme(axis.text = element_text(size = 12, face = "bold"),
             axis.title = element_text(size = 24, face = "bold"),
             plot.title = element_text(size = 36, face = "bold"),
-            text = element_text(family = "Roboto Condensed")),
+            text = element_text(family = "Roboto Condensed"),
+            legend.title = element_text(size = 16, face = "bold"))+
+      coord_flip(),
     
-    width = 900,
-    height = 900
+    width = 1200,
+    height = 1600
     
   )
   

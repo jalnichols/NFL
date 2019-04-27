@@ -5,9 +5,9 @@ library(shiny)
 
 #
 
-list_years <- vector("list", 25)
+list_years <- vector("list", 26)
 
-for(y in 1:25) {
+for(y in 1:26) {
   
   df <- paste0("https://www.pro-football-reference.com/years/", 1993 + y, "/draft.htm") %>%
     
